@@ -20,6 +20,11 @@ stop()
   exit
 }
 
+# Delete old file
+if [ "${DELETE_FILE}" = "true" ]; then
+    echo "0 2 * * * find /nfsshare/* -type f -mtime +30 |xargs rm -f" >>/var/spool/cron/crontabs/root
+fi
+
 # Check if the SHARED_DIRECTORY variable is empty
 if [ -z "${SHARED_DIRECTORY}" ]; then
   echo "The SHARED_DIRECTORY environment variable is unset or null, exiting..."
