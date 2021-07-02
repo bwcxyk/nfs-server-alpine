@@ -20,11 +20,6 @@ stop()
   exit
 }
 
-# Delete old file
-if [ "${DELETE_FILE}" = "true" ]; then
-    echo "0 2 * * * find /nfsshare/* -type f -mtime +30 |xargs rm -f" >>/var/spool/cron/crontabs/root
-fi
-
 # Check if the SHARED_DIRECTORY variable is empty
 if [ -z "${SHARED_DIRECTORY}" ]; then
   echo "The SHARED_DIRECTORY environment variable is unset or null, exiting..."
@@ -38,6 +33,11 @@ fi
 # would need a block like this for each extra share.
 # Any additional shares MUST be subdirectories of the root directory specified
 # by SHARED_DIRECTORY.
+
+# Delete old file
+if [ "${DELETE_FILE}" = "true" ]; then
+    echo "0 2 * * * find ${SHARED_DIRECTORY}/* -type f -mtime +30 |xargs rm -f" >>/var/spool/cron/crontabs/root
+fi
 
 # Check if the SHARED_DIRECTORY_2 variable is empty
 if [ ! -z "${SHARED_DIRECTORY_2}" ]; then
